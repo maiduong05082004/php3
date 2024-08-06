@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Category;
-use App\Models\productVariants;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -20,6 +19,7 @@ return new class extends Migration
             $table->string('image');
             $table->text('description');
             $table->foreignIdFor(Category::class)->constrained();
+            $table->integer('status')->default(1)->comment('1: Active, 2: Inactive, 3: Trashed');
             $table->timestamps();
         });
     }

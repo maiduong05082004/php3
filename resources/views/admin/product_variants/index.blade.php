@@ -11,7 +11,7 @@
                 <th scope="col">Id</th>
                 <th scope="col">Color</th>
                 <th scope="col">Size</th>
-                <th scope="col">Image</th>
+                <th scope="col">Images</th>
                 <th scope="col">Stock</th>
                 <th scope="col">Price</th>
                 <th scope="col">Action</th>
@@ -23,11 +23,16 @@
                     <th scope="row">{{ $variant->id }}</th>
                     <td>{{ $variant->color->name }}</td>
                     <td>{{ $variant->size->name }}</td>
-                    <td><img src="{{ $variant->imageLibrary ? $variant->imageLibrary->url : '' }}" alt="{{ $variant->imageLibrary ? $variant->imageLibrary->url : 'No Image' }}" width="50"></td>
+                    <td>
+                        @foreach($variant->images as $image)
+                            <img src="{{ asset('storage/' . $image->url) }}" alt="Image" width="50" height="50">
+                        @endforeach
+                    </td>
                     <td>{{ $variant->stock }}</td>
                     <td>{{ $variant->price }}</td>
                     <td>
                         <div class="hstack gap-3 flex-wrap">
+                            <a href="{{ route('admin.products.product_variants.product_variant_images.index', ['productId' => $product->id, 'variantId' => $variant->id]) }}" class="link-primary fs-15"><i class="ri-image-line"></i> Quản lý ảnh</a>
                             <a href="{{ route('admin.products.product_variants.edit', ['productId' => $product->id, 'id' => $variant->id]) }}" class="link-success fs-15"><i class="ri-edit-2-line"></i></a>
                             <form action="{{ route('admin.products.product_variants.destroy', ['productId' => $product->id, 'id' => $variant->id]) }}" method="POST" style="display: inline-block;">
                                 @csrf

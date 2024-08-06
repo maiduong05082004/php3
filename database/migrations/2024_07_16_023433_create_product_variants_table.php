@@ -1,9 +1,8 @@
 <?php
 
-use App\Models\color;
-use App\Models\imageLibrary;
-use App\Models\product;
-use App\Models\size;
+use App\Models\Color;
+use App\Models\Product;
+use App\Models\Size;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,14 +14,22 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Tạo bảng product_variants
         Schema::create('product_variants', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(product::class)->constrained();
-            $table->foreignIdFor(color::class)->constrained();
-            $table->foreignIdFor(size::class)->constrained();
-            $table->foreignIdFor(imageLibrary::class, 'image_libraries_id')->constrained();
+            $table->foreignIdFor(Product::class)->constrained();
+            $table->foreignIdFor(Color::class)->constrained();
+            $table->foreignIdFor(Size::class)->constrained();
             $table->integer('stock')->default(0);
             $table->decimal('price', 10, 2);
+            $table->timestamps();
+        });
+
+        // Tạo bảng product_variant_image_library
+        Schema::create('product_variant_image_library', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('product_variant_id')->constrained()->onDelete('cascade');
+            $table->foreignId('image_library_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -32,6 +39,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        // Xóa bảng product_variant_image_library trước
+        Schema::dropIfExists('product_variant_image_library');
+
+        // Sau đó xóa bảng product_variants
         Schema::dropIfExists('product_variants');
     }
 };

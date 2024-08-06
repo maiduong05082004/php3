@@ -88,8 +88,8 @@ class ProductController extends Controller
         return redirect()->route('admin.products.index')->with('success', 'Product moved to trash successfully.');
     }
     public function trash(){
-        $product = Product::where('status',3)->get();
-        return view('admin.products.trash', compact('product'));
+        $products = Product::where('status',3)->get();
+        return view('admin.products.trash', compact('products'));
     }
     public function restore($id){
         $product = Product::findOrFail($id);

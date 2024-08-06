@@ -4,7 +4,7 @@
 
 @section('content')
 <h2>Thêm biến thể mới</h2>
-<form action="{{ route('admin.products.product_variants.store', $product->id) }}" method="POST">
+<form action="{{ route('admin.products.product_variants.store', $product->id) }}" method="POST" enctype="multipart/form-data">
     @csrf
     <div class="input-group my-3">
         <label class="input-group-text" for="color_id">Màu</label>
@@ -23,13 +23,8 @@
         </select>
     </div>
     <div class="input-group my-3">
-        <label class="input-group-text" for="image_library_id">Ảnh</label>
-        <select class="form-select" id="image_libraries_id" name="image_library_id">
-            <option value="">Không có ảnh</option>
-            @foreach($images as $image)
-                <option value="{{ $image->id }}">{{ $image->url }}</option>
-            @endforeach
-        </select>
+        <label class="input-group-text" for="images">Ảnh</label>
+        <input type="file" class="form-control" id="images" name="images[]" multiple>
     </div>
     <div>
         <label for="stock" class="form-label">Số lượng</label>

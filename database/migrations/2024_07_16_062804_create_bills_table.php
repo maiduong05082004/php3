@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignIdFor(User::class)->constrained();
             $table->foreignIdFor(billDetail::class)->constrained();
             $table->decimal('total');
+            $table->tinyInteger('status')->default(1)->nullable();
             $table->timestamps();
         });
     }

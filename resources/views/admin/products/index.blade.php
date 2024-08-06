@@ -6,6 +6,11 @@
             Thêm sản phẩm mới
         </button>
     </a>
+    <a class="text-white" href="{{ route('admin.products.trash') }}">
+        <button type="button" class="btn btn-danger waves-effect waves-light my-3 float-end">
+            Xem thùng rác
+        </button>
+    </a>
     <table class="table table-success table-striped align-middle table-normal mb-0">
         <thead>
             <tr>
@@ -40,10 +45,10 @@
                         <div class="hstack gap-3 flex-wrap">
                             <a href="{{ route('admin.products.edit', $product->id) }}" class="link-success fs-15"><i
                                     class="ri-edit-2-line"></i></a>
-                            <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST"
+                            <form action="{{ route('admin.products.soft_destroy', $product->id) }}" method="POST"
                                 style="display: inline-block;">
                                 @csrf
-                                @method('DELETE')
+                                @method('PUT')
                                 <button type="submit" class="btn btn-link link-danger fs-15 p-0 m-0"
                                     onclick="return confirm('Are you sure?')">
                                     <i class="ri-delete-bin-line"></i>

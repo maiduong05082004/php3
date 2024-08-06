@@ -12,7 +12,6 @@ class ProductVariant extends Model
         'product_id',
         'color_id',
         'size_id',
-        'image_libraries_id', // sử dụng đúng tên cột
         'stock',
         'price',
     ];
@@ -32,8 +31,8 @@ class ProductVariant extends Model
         return $this->belongsTo(Size::class, 'size_id');
     }
 
-    public function imageLibrary()
+    public function images()
     {
-        return $this->belongsTo(ImageLibrary::class, 'image_libraries_id'); // sử dụng đúng tên cột
+        return $this->belongsToMany(ImageLibrary::class, 'product_variant_image_library');
     }
 }

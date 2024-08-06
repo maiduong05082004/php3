@@ -15,7 +15,7 @@ class ProductVariantController extends Controller
     public function index($productId)
     {
         $product = Product::findOrFail($productId);
-        $variants = ProductVariant::where('product_id', $productId)->with(['color', 'size', 'imageLibrary'])->get();
+        $variants = ProductVariant::where('product_id', $productId)->with(['color', 'size', 'images'])->get();
         return view('admin.product_variants.index', compact('product', 'variants'));
     }
 
@@ -33,19 +33,26 @@ class ProductVariantController extends Controller
         $request->validate([
             'color_id' => 'required|exists:colors,id',
             'size_id' => 'required|exists:sizes,id',
-            'image_library_id' => 'nullable|exists:image_libraries,id',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'stock' => 'required|integer',
             'price' => 'required|numeric',
         ]);
 
-        ProductVariant::create([
+        $variant = ProductVariant::create([
             'product_id' => $productId,
             'color_id' => $request->color_id,
             'size_id' => $request->size_id,
-            'image_libraries_id' => $request->image_library_id,
             'stock' => $request->stock,
             'price' => $request->price,
         ]);
+
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('images', 'public');
+                $imageLibrary = ImageLibrary::create(['url' => $path]);
+                $variant->images()->attach($imageLibrary->id);
+            }
+        }
 
         return redirect()->route('admin.products.product_variants.index', $productId)->with('success', 'Product variant created successfully.');
     }
