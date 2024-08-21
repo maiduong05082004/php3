@@ -2,18 +2,47 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Banner;
+use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
+    public function __construct()
+    {
+    }
     public function index()
     {
-        return view('client.home');
+        $categories = Category::where('parent_id', null)
+        ->where('id', '<>', 0)
+        ->with('children.children')
+        ->where('status', '<>', 3)
+        ->orderBy('id', 'asc')
+        ->get();
+        $banners = Banner::all();
+        $products = Product::where('status', '<>', 3)->with('category')->orderBy('id', 'desc')->get();
+
+        return view('client.home', compact('categories', 'banners', 'products'));
     }
-    public function productDetail()
+
+    public function productDetail($id)
     {
-        return view('client.productDetail');
+        $categories = Category::where('parent_id', null)
+            ->where('id', '<>', 0)
+            ->with('children')
+            ->where('status', '<>', 3)
+            ->orderBy('id', 'asc')
+            ->get();
+
+        $product = Product::with(['variants.color', 'variants.size', 'variants.images'])
+            ->findOrFail($id);
+            $prices = $product->variants->pluck('price')->all();
+            $minPrice = min($prices);
+            $maxPrice = max($prices);
+        return view('client.productDetail', compact('categories', 'product', 'minPrice', 'maxPrice'));
     }
+
     public function category()
     {
         return view('client.category');

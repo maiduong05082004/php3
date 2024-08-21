@@ -15,7 +15,18 @@
             <option value="0" {{ !$Categories->status ? 'selected' : '' }}>Không hoạt động</option>
         </select>
     </div>
-
+    <div class="input-group my-3">
+        <label class="input-group-text" for="parent_id">Danh mục mẹ</label>
+        <select class="form-select" id="parent_id" name="parent_id">
+            <option value="">Danh mục mẹ</option>
+            @foreach ($SubCategories as $sub)
+                <option value="{{ $sub->id }}" {{ isset($Categories) && $Categories->parent_id == $sub->id ? 'selected' : '' }}>
+                    {{ $sub->name }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+    
     <button type="submit" class="btn btn-primary">Sửa danh mục</button>
 </form>
 @endsection

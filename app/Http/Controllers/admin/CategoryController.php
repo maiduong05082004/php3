@@ -10,13 +10,14 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::where('id', '<>', 0)->where('status', '<>', 3)->orderBy('id', 'desc')->get();
+        $categories = Category::where('id', '<>', 0)->where('status', '<>', 3)->whereNull('parent_id')->orderBy('id', 'desc')->get();
         return view('admin.categories.index', compact('categories'));
     }
-    
+
     public function create()
     {
-        return view('admin.categories.create');
+        $categories = Category::whereNull('parent_id')->get();
+        return view('admin.categories.create',compact('categories'));
     }
 
     public function store(Request $request)
@@ -24,6 +25,7 @@ class CategoryController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'status' => 'required|boolean',
+            'parent_id' => 'nullable|exists:categories,id',
         ]);
 
         Category::create($request->all());
@@ -39,23 +41,25 @@ class CategoryController extends Controller
     public function edit($id)
     {
         $Categories = Category::query()->find($id);
-        return view('admin.categories.edit', compact('Categories'));
+        $SubCategories = Category::whereNull('parent_id')->get();
+        return view('admin.categories.edit', compact('Categories','SubCategories'));
     }
 
     public function update(Request $request, int $id)
-    {
-        $Categories = Category::findOrFail($id);
-
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'status' => 'required|boolean',
-        ]);
-
-        $data = $request->all();
-        $Categories->update($data);
-
-        return redirect()->route('admin.categories.index')->with('success', 'Categories updated successfully.');
+{
+    $Categories = Category::findOrFail($id);
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'status' => 'required|boolean',
+        'parent_id' => 'nullable|exists:categories,id',
+    ]);
+    $data = $request->all();
+    if (empty($data['parent_id'])) {
+        $data['parent_id'] = null;
     }
+    $Categories->update($data);
+    return redirect()->route('admin.categories.index')->with('success', 'Categories updated successfully.');
+}
     public function softDestroy($id)
     {
         $Categories = Category::findOrFail($id);
@@ -68,11 +72,13 @@ class CategoryController extends Controller
         $Categories->delete();
         return redirect()->route('admin.categories.index')->with('success', 'Categories deleted successfully.');
     }
-    public function trash(){
-        $categories = Category::where('status',3)->get();
+    public function trash()
+    {
+        $categories = Category::where('status', 3)->get();
         return view('admin.categories.trash', compact('categories'));
     }
-    public function restore($id){
+    public function restore($id)
+    {
         $Categories = Category::findOrFail($id);
         $Categories->update(['status' => 1]);
         return redirect()->route('admin.categories.trash')->with('success', 'Categories restored successfully.');
@@ -80,10 +86,22 @@ class CategoryController extends Controller
     public function forceDelete($id)
     {
         $category = Category::findOrFail($id);
+        $subcategories = Category::where('parent_id', $category->id)->get();
+        foreach ($subcategories as $subcategory) {
+            Product::where('category_id', $subcategory->id)
+                ->update(['category_id' => 0]);
+            $subcategory->delete();
+        }
         Product::where('category_id', $category->id)
-        ->update(['category_id' => 0]);
+            ->update(['category_id' => 0]);
         $category->delete();
 
         return redirect()->route('admin.categories.trash')->with('success', 'Categories permanently deleted successfully.');
+    }
+    public function subcategories($id)
+    {
+        $category = Category::findOrFail($id);
+        $subcategories = Category::where('parent_id', $id)->get();
+        return view('admin.categories.subcategories', compact('category', 'subcategories'));
     }
 }

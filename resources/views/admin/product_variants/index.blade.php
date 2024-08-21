@@ -1,7 +1,7 @@
 @extends('admin.layout.main')
 
 @section('content')
-    <h1>Product Variants for {{ $product->name }}</h1>
+    <h1>Sản phẩm biến thể của {{ $product->name }}</h1>
     <button type="button" class="btn btn-primary waves-effect waves-light my-3">
         <a class="text-white" href="{{ route('admin.products.product_variants.create', $product->id) }}">Thêm biến thể sản phẩm mới</a>
     </button>

@@ -1,7 +1,7 @@
 @extends('admin.layout.main')
 
 @section('content')
-    <h1>Images for Product Variant {{ $variant->product->name }}</h1>
+    <h1>Ảnh của sản phẩm {{ $variant->product->name }}</h1>
     <a class="text-white" href="{{ route('admin.products.product_variants.product_variant_images.create', ['productId' => $variant->product_id, 'variantId' => $variant->id]) }}">
         <button type="button" class="btn btn-primary waves-effect waves-light my-3">
             Thêm ảnh mới

@@ -647,11 +647,11 @@
                                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="d-flex align-items-center">
                                     <img class="rounded-circle header-profile-user"
-                                        src="images-admin/users/avatar-1.jpg" alt="Header Avatar">
+                                        src="https://w7.pngwing.com/pngs/636/819/png-transparent-computer-icons-privacy-policy-admin-icon-copyright-rim-share-icon-thumbnail.png" alt="Header Avatar">
                                     <span class="text-start ms-xl-2">
-                                        <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">Anna
-                                            Adame</span>
-                                        <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">Founder</span>
+                                        <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">Admin
+                                            </span>
+                                        <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">Logout</span>
                                     </span>
                                 </span>
                             </button>
@@ -675,9 +675,12 @@
                                         class="badge bg-success-subtle text-success mt-1 float-end">New</span><i
                                         class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span
                                         class="align-middle">Settings</span></a>
-                                <a class="dropdown-item" href="auth-logout-basic.html"><i
-                                        class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span
-                                        class="align-middle" data-key="t-logout">Logout</span></a>
+                                        <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+                                            @csrf
+                                        </form>
+                                        <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                            <i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span class="align-middle" data-key="t-logout">Logout</span>
+                                        </a>
                             </div>
                         </div>
                     </div>

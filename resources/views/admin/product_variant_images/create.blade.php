@@ -3,7 +3,7 @@
 @section('title', 'Thêm Ảnh Cho Biến Thể Sản Phẩm')
 
 @section('content')
-<h2>Thêm Ảnh Cho Biến Thể Sản Phẩm</h2>
+<h2>Thêm Ảnh Cho Sản Phẩm</h2>
 <form action="{{ route('admin.products.product_variants.product_variant_images.store', ['productId' => $variant->product_id, 'variantId' => $variant->id]) }}" method="POST" enctype="multipart/form-data">
     @csrf
     <div class="input-group my-3">

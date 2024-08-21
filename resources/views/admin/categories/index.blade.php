@@ -15,6 +15,7 @@
                 <th scope="col">Id</th>
                 <th scope="col">Tên danh mục</th>
                 <th scope="col">trạng thái</th>
+                <th scope="col" style="width:100px" >Quản lý danh mục con</th>
                 <th scope="col">Action</th>
             </tr>
         </thead>
@@ -24,6 +25,7 @@
                     <th scope="row">{{ $category->id }}</th>
                     <td>{{ $category->name }}</td>
                     <td>{{ $category->status == 1 ? 'Active' : 'In active' }}</td>
+                    <td><a href="{{ route('admin.categories.subcategories', $category->id) }}" class="">Danh mục con</a></td>
                     <td>
                         <div class="hstack gap-3 flex-wrap">
                             <a href="{{ route('admin.categories.edit', $category->id) }}" class="link-success fs-15"><i

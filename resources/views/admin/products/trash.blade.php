@@ -33,6 +33,7 @@
                     <td>
                         <form action="{{ route('admin.products.restore',$product->id ) }}" method="POST" style="display:inline;">
                             @csrf
+                            @method('PUT')
                             <button type="submit" class="btn btn-success">Khôi Phục</button>
                         </form>
                         <form action="{{ route('admin.products.forceDelete', $product->id) }}" method="POST" style="display:inline;">

@@ -11,6 +11,7 @@ use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\ProductVariantController;
 use App\Http\Controllers\Admin\ProductVariantImageController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\User\AuthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,7 +26,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::resource('/', HomeController::class);
-Route::get('/product_detail', [HomeController::class, 'productDetail']);
+Route::get('/product_detail/{id}', [HomeController::class, 'productDetail'])->name('product_detail');
 Route::get('/category', [HomeController::class, 'category']);
 Route::get('/blog', [HomeController::class, 'blog']);
 Route::get('/blog_detail', [HomeController::class, 'blogDetail']);
@@ -38,10 +39,13 @@ Route::get('/checkout', [HomeController::class, 'checkout']);
 Route::get('/sign_in', [UserAuthController::class, 'index']);
 Route::get('/404', [HomeController::class, 'NotFound']);
 
-// User Authentication Routes
+
 Route::get('/login', [UserAuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [UserAuthController::class, 'login']);
 Route::post('/logout', [UserAuthController::class, 'logout'])->name('logout');
+
+Route::get('/register', [UserAuthController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [UserAuthController::class, 'register']);
 
 // Admin Authentication Routes
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -64,8 +68,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::delete('destroy/{id}', 'destroy')->name('destroy')->where('id', '[0-9]+');
             Route::put('soft_destroy/{id}', 'softDestroy')->name('soft_destroy')->where('id', '[0-9]+');
             Route::get('trash', 'trash')->name('trash');
-            Route::post('restore/{id}', 'restore')->name('restore')->where('id', '[0-9]+');
+            Route::put('restore/{id}', 'restore')->name('restore')->where('id', '[0-9]+');
             Route::delete('forceDelete/{id}', 'forceDelete')->name('forceDelete')->where('id', '[0-9]+');
+            Route::get('{id}/subcategories', [CategoryController::class, 'subcategories'])->name('subcategories');
         });
 
         Route::prefix('products')->name('products.')->group(function () {

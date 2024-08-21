@@ -15,14 +15,19 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
         $credentials = $request->only('email', 'password');
 
-        if (Auth::guard('admin')->attempt($credentials, $request->filled('remember'))) {
+        if (Auth::guard('admin')->attempt(array_merge($credentials, ['role' => 'admin']), $request->filled('remember'))) {
             return redirect()->intended(route('admin.dashboard'));
         }
 
         return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
+            'email' => 'The provided credentials do not match our records or you do not have admin access.',
         ]);
     }
 

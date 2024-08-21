@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="css\bootstrap.min.css">
+<link rel="stylesheet" href="{{ asset('css\bootstrap')}}.min.css">
 
 <!-- Customizable CSS -->
 <link rel="stylesheet" href="{{ asset('css\main.css')}}">
@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="{{ asset('css\animate.min')}}.css">
 <link rel="stylesheet" href="{{ asset('css\rateit.css')}}">
 <link rel="stylesheet" href="{{ asset('css\bootstrap-select')}}.min.css">
+<link rel="stylesheet" href="{{ asset('css\bootstrap')}}.min.css">
 
 <!-- Icons/Glyphs -->
 <link rel="stylesheet" href="{{ asset('css\font-awesome')}}.css">

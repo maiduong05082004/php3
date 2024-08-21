@@ -38,7 +38,7 @@
                             <img src="{{ Storage::url($product->image) }}" style="width:250px; height:250px;">
                         @endif
                     </td>
-                    <td>{{ $product->description }}</td>
+                    <td>{!! $product->description !!}</td>
                     <td><a href="{{ route('admin.products.product_variants.index', $product->id) }}">Quản lý biến thể</a>
                     </td>
                     <td>

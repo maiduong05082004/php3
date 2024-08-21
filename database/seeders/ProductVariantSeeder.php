@@ -8,6 +8,6 @@ class ProductVariantSeeder extends Seeder
 {
     public function run()
     {
-        ProductVariant::factory()->count(100)->create();
+        ProductVariant::factory()->count(50)->create();
     }
 }
