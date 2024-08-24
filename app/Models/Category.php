@@ -22,4 +22,14 @@ class Category extends Model
     {
         return $this->belongsTo(Category::class, 'parent_id');
     }
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    public function allProducts()
+    {
+        $categoryIds = $this->children->pluck('id');
+        return Product::whereIn('category_id', $categoryIds->push($this->id))->get();
+    }
 }

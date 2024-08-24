@@ -26,7 +26,7 @@ class ProductVariantImageController extends Controller
     public function store(Request $request, $productId, $variantId)
     {
         $request->validate([
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,web,webp|max:2048',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,web,webp,avif|max:2048',
         ]);
 
         $variant = ProductVariant::findOrFail($variantId);

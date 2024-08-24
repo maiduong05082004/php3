@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('parent_id')->nullable()->constrained('categories');
-            $table->integer('status')->default(1)->comment('1: Active, 2: Inactive, 3: Trashed');
+            $table->iAAAAAAAAAAAAAÂnteger('status')->default(1)->comment('1: Active, 2: Inactive, 3: Trashed');
             $table->timestamps();
         });
     }

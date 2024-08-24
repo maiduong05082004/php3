@@ -38,6 +38,7 @@ Route::get('/cart', [HomeController::class, 'cart']);
 Route::get('/checkout', [HomeController::class, 'checkout']);
 Route::get('/sign_in', [UserAuthController::class, 'index']);
 Route::get('/404', [HomeController::class, 'NotFound']);
+Route::get('/category/{id}/products', [HomeController::class, 'showCategoryProducts'])->name('category.products');
 
 
 Route::get('/login', [UserAuthController::class, 'showLoginForm'])->name('login');

@@ -33,7 +33,7 @@ class ProductVariantController extends Controller
         $request->validate([
             'color_id' => 'required|exists:colors,id',
             'size_id' => 'required|exists:sizes,id',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,web,webp|max:2048',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,web,webp,avif|max:2048',
             'stock' => 'required|integer',
             'price' => 'required|numeric',
         ]);

@@ -1183,11 +1183,11 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="wide-banner cnt-strip">
-                                    <div class="image"> <img class="img-responsive" src="images\banners\home-banner.jpg"
+                                    <div class="image"> <img class="img-responsive" src="images\banners\home-banner2.webp"
                                             alt=""> </div>
                                     <div class="strip strip-text">
                                         <div class="strip-inner">
-                                            <h2 class="text-right">New Mens Fashion<br>
+                                            <h2 class="text-right">New decoration<br>
                                                 <span class="shopping-needs">Save up to 40% off</span>
                                             </h2>
                                         </div>

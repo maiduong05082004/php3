@@ -62,7 +62,7 @@
                     <div class="col-xs-12 col-sm-12 col-md-3 logo-holder">
                         <!-- ============================================================= LOGO ============================================================= -->
                         <div class="logo"> <a href="/"> <img src="{{ asset('images\logo.png') }}"
-                                    alt="logo"> </a> 
+                                    alt="logo"> </a>
                         </div>
                         <!-- /.logo -->
                         <!-- ============================================================= LOGO : END ============================================================= -->
@@ -88,7 +88,7 @@
                     <div class="col-xs-12 col-sm-12 col-md-2 animate-dropdown top-cart-row">
                         <!-- ============================================================= SHOPPING CART DROPDOWN ============================================================= -->
 
-                        <div class="dropdown dropdown-cart"> <a href="#" class="dropdown-toggle lnk-cart"
+                        <div class="dropdown dropdown-cart"> <a href="#" class="dropdown-toggle lnk-cart" style="width: 178px;"
                                 data-toggle="dropdown">
                                 <div class="items-cart-inner">
                                     <div class="basket"> <i class="glyphicon glyphicon-shopping-cart"></i> </div>
@@ -160,111 +160,54 @@
                             <div class="nav-outer">
                                 <ul class="nav navbar-nav">
                                     <li class="active dropdown yamm-fw">
-                                        <a href="/" data-hover="dropdown" class="dropdown-toggle"
-                                            data-toggle="dropdown">Home</a>
+                                        <a href="{{ route('index') }}"
+                                            >Trang chủ</a>
                                     </li>
-                                    {{-- @foreach ($categories as $category)
+                                    @foreach ($categories as $category)
                                         <li class="dropdown yamm mega-menu">
-                                            <a href="#" data-hover="dropdown" class="dropdown-toggle"
-                                                data-toggle="dropdown">
-                                                {{ $category->name }}
-                                            </a>
+                                            <a href="{{ route('category.products', $category->id) }}"
+                                                data-hover="dropdown"
+                                                class="dropdown-toggle">{{ $category->name }}</a>
                                             @if ($category->children->count() > 0)
-                                                <!-- Kiểm tra nếu có danh mục con -->
-                                                <ul class="dropdown-menu">
-                                                    @foreach ($category->children as $child)
-                                                        <li class="dropdown yamm mega-menu">
-                                                            <a class="dropdown-toggle" href="#">{{ $child->name }}</a>
-                                                            @if ($child->children->count() > 0)
-                                                                <!-- Kiểm tra danh mục con của danh mục con -->
-                                                                <ul class="dropdown-menu">
-                                                                    @foreach ($child->children as $subChild)
-                                                                        <li><a href="#">{{ $subChild->name }}</a>
-                                                                        </li>
-                                                                    @endforeach
-                                                                </ul>
-                                                            @endif
-                                                        </li>
-                                                    @endforeach
+                                                <!-- Kiểm tra xem có danh mục con không -->
+                                                <ul class="dropdown-menu container">
+                                                    <li>
+                                                        <div class="yamm-content ">
+                                                            <div class="row">
+                                                                @foreach ($category->children as $sub_category)
+                                                                    <!-- Lặp qua các danh mục con -->
+                                                                    <div class="col-xs-12 col-sm-6 col-md-2 col-menu">
+                                                                        <h2 class="title">
+                                                                            <a
+                                                                                href="{{ route('category.products', $sub_category->id) }}">{{ $sub_category->name }}</a>
+                                                                        </h2>
+                                                                        @if ($sub_category->children->count() > 0)
+                                                                            <!-- Kiểm tra xem có danh mục con của danh mục con không -->
+                                                                            <ul class="links">
+                                                                                @foreach ($sub_category->children as $sub_item)
+                                                                                    <!-- Lặp qua các danh mục con của danh mục con -->
+                                                                                    <li>
+                                                                                        <a
+                                                                                            href="{{ route('category.products', $sub_item->id) }}">{{ $sub_item->name }}</a>
+                                                                                    </li>
+                                                                                @endforeach
+                                                                            </ul>
+                                                                        @endif
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
+                                                        </div>
+                                                    </li>
                                                 </ul>
                                             @endif
                                         </li>
-                                    @endforeach --}}
-                                    {{-- <ul class="nav navbar-nav">
-                                        @foreach($categories as $category)
-                                            @include('client.partials.category_children', ['category' => $category])
-                                        @endforeach
-                                    </ul> --}}
-                                    @foreach($categories as $category)
-                                    <li class="dropdown yamm mega-menu">
-                                        <a href="/" data-hover="dropdown" class="dropdown-toggle" data-toggle="dropdown">{{ $category->name }}</a>
-                                        
-                                        @if($category->children->count() > 0) <!-- Kiểm tra xem có danh mục con không -->
-                                            <ul class="dropdown-menu container">
-                                                <li>
-                                                    <div class="yamm-content ">
-                                                        <div class="row">
-                                                            @foreach($category->children as $sub_category) <!-- Lặp qua các danh mục con -->
-                                                                <div class="col-xs-12 col-sm-6 col-md-2 col-menu">
-                                                                    <h2 class="title">{{ $sub_category->name }}</h2>
-                                                                    
-                                                                    @if($sub_category->children->count() > 0) <!-- Kiểm tra xem có danh mục con của danh mục con không -->
-                                                                        <ul class="links">
-                                                                            @foreach($sub_category->children as $sub_item) <!-- Lặp qua các danh mục con của danh mục con -->
-                                                                                <li><a href="#">{{ $sub_item->name }}</a></li>
-                                                                            @endforeach
-                                                                        </ul>
-                                                                    @endif
-                                                                </div>
-                                                            @endforeach
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        @endif
-                                    </li>
-                                @endforeach
-                                
+                                    @endforeach
+
                                     <li class="dropdown"> <a href="/blog">Blog</a> </li>
                                     <li class="dropdown"> <a href="/my_wishlist">Wishlist</a> </li>
                                     <li><a href="/terms_conditions">Terms and Condition</a></li>
                                     <li><a href="/faq">FAQ</a></li>
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-hover="dropdown"
-                                            data-toggle="dropdown">Pages</a>
-                                        <ul class="dropdown-menu pages">
-                                            <li>
-                                                <div class="yamm-content">
-                                                    <div class="row">
-                                                        <div class="col-xs-12 col-menu">
-                                                            <ul class="links">
-                                                                <li><a href="/">Home</a></li>
-                                                                <li><a href="category.html">Category</a></li>
-                                                                <li><a href="product_detail">Detail</a></li>
-                                                                <li><a href="shopping-cart.html">Shopping Cart
-                                                                        Summary</a></li>
-                                                                <li><a href="/checkout">Checkout</a></li>
-                                                                <li><a href="blog.html">Blog</a></li>
-                                                                <li><a href="blog-details.html">Blog Detail</a></li>
-                                                                <li><a href="/category">Contact</a></li>
-                                                                <li><a href="sign-in.html">Sign In</a></li>
-                                                                <li><a href="my-wishlist.html">Wishlist</a></li>
-                                                                <li><a href="/terms_conditions">Terms and Condition</a>
-                                                                </li>
-                                                                <li><a href="track-orders.html">Track Orders</a></li>
-                                                                <li><a
-                                                                        href="product-comparison.html">Product-Comparison</a>
-                                                                </li>
-                                                                <li><a href="faq.html">FAQ</a></li>
-                                                                <li><a href="404.html">404</a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li class="dropdown  navbar-right special-menu">
+                                    <li class="navbar-right">
                                         <a href="#">Todays offer</a>
                                     </li>
                                 </ul>
