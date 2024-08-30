@@ -14,10 +14,11 @@ class CategoryController extends Controller
         return view('admin.categories.index', compact('categories'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $categories = Category::whereNull('parent_id')->get();
-        return view('admin.categories.create',compact('categories'));
+        $parent_id = $request->query('parent_id');
+        return view('admin.categories.create', compact('categories', 'parent_id'));
     }
 
     public function store(Request $request)
@@ -28,9 +29,13 @@ class CategoryController extends Controller
             'parent_id' => 'nullable|exists:categories,id',
         ]);
 
-        Category::create($request->all());
+        $category = Category::create($request->all());
 
-        return redirect()->route('admin.categories.index')->with('success', 'Categories created successfully.');
+        if ($category->parent_id) {
+            return redirect()->route('admin.categories.subcategories', $category->parent_id)->with('success', 'Danh mục con đã được tạo thành công.');
+        }
+
+        return redirect()->route('admin.categories.index')->with('success', 'Danh mục đã được tạo thành công.');
     }
 
     public function show($id)
@@ -40,31 +45,54 @@ class CategoryController extends Controller
 
     public function edit($id)
     {
-        $Categories = Category::query()->find($id);
-        $SubCategories = Category::whereNull('parent_id')->get();
-        return view('admin.categories.edit', compact('Categories','SubCategories'));
+        $Categories = Category::findOrFail($id);
+        $SubCategories = Category::whereNull('parent_id')->where('id', '!=', $id)->get();
+        $parentCategory = null;
+        if ($Categories->parent_id) {
+            $parentCategory = Category::find($Categories->parent_id);
+        }
+        return view('admin.categories.edit', compact('Categories', 'SubCategories', 'parentCategory'));
     }
 
     public function update(Request $request, int $id)
-{
-    $Categories = Category::findOrFail($id);
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'status' => 'required|boolean',
-        'parent_id' => 'nullable|exists:categories,id',
-    ]);
-    $data = $request->all();
-    if (empty($data['parent_id'])) {
-        $data['parent_id'] = null;
+    {
+        $category = Category::findOrFail($id);
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'status' => 'required|boolean',
+            'parent_id' => 'nullable|exists:categories,id',
+        ]);
+
+        $data = $request->all();
+        if (empty($data['parent_id'])) {
+            $data['parent_id'] = null;
+        }
+
+        $oldParentId = $category->parent_id;
+        $category->update($data);
+
+        if ($category->parent_id) {
+            return redirect()->route('admin.categories.subcategories', $category->parent_id)
+                ->with('success', 'Danh mục đã được cập nhật thành công.');
+        } elseif ($oldParentId && !$category->parent_id) {
+            return redirect()->route('admin.categories.index')
+                ->with('success', 'Danh mục đã được cập nhật và chuyển thành danh mục gốc.');
+        } else {
+            return redirect()->route('admin.categories.index')
+                ->with('success', 'Danh mục đã được cập nhật thành công.');
+        }
     }
-    $Categories->update($data);
-    return redirect()->route('admin.categories.index')->with('success', 'Categories updated successfully.');
-}
     public function softDestroy($id)
     {
         $Categories = Category::findOrFail($id);
         $Categories->update(['status' => 3]);
-        return redirect()->route('admin.categories.index')->with('success', 'Categories moved to trash successfully.');
+        if ($Categories->parent_id) {
+            return redirect()->route('admin.categories.subcategories', $Categories->parent_id)
+                ->with('success', 'Danh mục đã được chuyển vào thùng rác.');
+        } else {
+            return redirect()->route('admin.categories.index')
+                ->with('success', 'Danh mục đã được chuyển vào thùng rác.');
+        }
     }
     public function destroy($id)
     {
@@ -100,8 +128,9 @@ class CategoryController extends Controller
     }
     public function subcategories($id)
     {
-        $category = Category::findOrFail($id);
-        $subcategories = Category::where('parent_id', $id)->get();
-        return view('admin.categories.subcategories', compact('category', 'subcategories'));
+        $category = Category::where('id', $id)->where('status', '<>', 3)->firstOrFail();
+        $subcategories = Category::where('parent_id', $id)->where('status', '<>', 3)->get();
+        $parent = Category::find($category->parent_id);
+        return view('admin.categories.subcategories', compact('category', 'subcategories', 'parent'));
     }
 }

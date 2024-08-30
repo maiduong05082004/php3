@@ -1,6 +1,7 @@
 @extends('admin.layout.main')
 @section('title', 'Edit Category')
 @section('content')
+<h2>Sửa danh mục: {{ $Categories->name }}</h2>
 <form action="{{ route('admin.categories.update',['id'=> $Categories->id]) }}" method="POST">
     @csrf
     @method('PUT')
@@ -15,6 +16,13 @@
             <option value="0" {{ !$Categories->status ? 'selected' : '' }}>Không hoạt động</option>
         </select>
     </div>
+    @if($Categories->parent_id !== null)
+            <input type="hidden" name="parent_id" value="{{ $Categories->parent_id }}">
+            <div class="mb-3">
+                <label class="form-label">Danh mục mẹ</label>
+                <input type="text" class="form-control" value="{{ $parentCategory->name ?? 'Không có' }}" disabled>
+            </div>
+        @else
     <div class="input-group my-3">
         <label class="input-group-text" for="parent_id">Danh mục mẹ</label>
         <select class="form-select" id="parent_id" name="parent_id">
@@ -26,7 +34,13 @@
             @endforeach
         </select>
     </div>
-    
+    @endif
     <button type="submit" class="btn btn-primary">Sửa danh mục</button>
+    @if($Categories->parent_id !== null)
+    <a href="{{ route('admin.categories.subcategories', $Categories->parent_id) }}" class="btn btn-primary">Quay lại</a>
+@else
+    <a href="{{ route('admin.categories.index') }}" class="btn btn-primary">Quay lại</a>
+@endif
 </form>
+
 @endsection

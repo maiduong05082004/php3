@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class HomeController extends Controller
 {
     public function __construct() {}
-    
+
     private function getCategories()
     {
         return Category::where('parent_id', null)
@@ -69,11 +69,28 @@ class HomeController extends Controller
 
         $product = Product::with(['variants.color', 'variants.size', 'variants.images'])
             ->findOrFail($id);
-        $prices = $product->variants->pluck('price')->all();
-        $minPrice = min($prices);
-        $maxPrice = max($prices);
+
+        // Mảng chứa tất cả giá của biến thể (bao gồm cả giá khuyến mãi nếu có)
+        $minPrice = $product->priceSale ?? $product->price;
+        $maxPrice = $minPrice;
+
+        if ($product->variants->isNotEmpty()) {
+            foreach ($product->variants as $variant) {
+                $price = $variant->priceSale ?? $variant->price;
+
+                // Cập nhật minPrice và maxPrice nếu giá trị nhỏ hơn hoặc lớn hơn hiện tại
+                if ($price < $minPrice) {
+                    $minPrice = $price;
+                }
+                if ($price > $maxPrice) {
+                    $maxPrice = $price;
+                }
+            }
+        }
+
         return view('client.productDetail', compact('categories', 'product', 'minPrice', 'maxPrice'));
     }
+
 
     public function category()
     {
@@ -110,11 +127,6 @@ class HomeController extends Controller
     public function myWishlist()
     {
         return view('client.myWishlist');
-    }
-
-    public function cart()
-    {
-        return view('client.cart');
     }
 
     public function checkout()

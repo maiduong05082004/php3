@@ -77,18 +77,15 @@
                         </div>
                         <!-- /.col -->
                     </div>
-                    <!-- /.col -->
                     <div class="col col-sm-6 col-md-4 text-right">
                         <div class="pagination-container">
                             <ul class="list-inline list-unstyled">
-                              {{-- Nút Previous --}}
                               @if ($products->onFirstPage())
                                   <li class="prev disabled"><span><i class="fa fa-angle-left"></i></span></li>
                               @else
                                   <li class="prev"><a href="{{ $products->previousPageUrl() }}"><i class="fa fa-angle-left"></i></a></li>
                               @endif
           
-                              {{-- Hiển thị các số trang --}}
                               @for ($i = 1; $i <= $products->lastPage(); $i++)
                                   @if ($i == $products->currentPage())
                                       <li class="active"><span>{{ $i }}</span></li>
@@ -97,20 +94,15 @@
                                   @endif
                               @endfor
           
-                              {{-- Nút Next --}}
                               @if ($products->hasMorePages())
                                   <li class="next"><a href="{{ $products->nextPageUrl() }}"><i class="fa fa-angle-right"></i></a></li>
                               @else
                                   <li class="next disabled"><span><i class="fa fa-angle-right"></i></span></li>
                               @endif
                           </ul>
-                            <!-- /.list-inline -->
                         </div>
-                        <!-- /.pagination-container -->
                     </div>
-                    <!-- /.col -->
                 </div>
-                <!-- /.row -->
             </div>
             <div class="search-result-container ">
                 <div id="myTabContent" class="tab-content category-list">
@@ -119,7 +111,6 @@
                           @foreach ($products->chunk(3) as $chunk)
                             <div class="row">
                                 @foreach ($chunk as $product)
-                                    <!-- Lặp qua các sản phẩm -->
                                     <div class="col-md-4 wow fadeInUp">
                                         <div class="products">
                                             <div class="product">
@@ -128,9 +119,7 @@
                                                                 src="{{ asset('storage/' . $product->image) }}"
                                                                 alt="" width="346px" height="259px"></a>
                                                     </div>
-                                                    <!-- /.image -->
                                                 </div>
-                                                <!-- /.product-image -->
                                                 <div class="product-info text-left">
                                                     <h3 class="name"><a href="{{ route('product_detail', $product->id) }}">{{ $product->name }}</a></h3>
                                                     <div class="product-price"> <span class="price">
@@ -138,7 +127,6 @@
                                                             class="price-before-discount">{{ $product->price_before_discount }}</span>
                                                     </div>
                                                 </div>
-                                                <!-- /.product-info -->
                                             </div>
                                         </div>
                                     </div>
@@ -153,14 +141,12 @@
                 <div class="text-right">
                     <div class="pagination-container">
                       <ul class="list-inline list-unstyled">
-                        {{-- Nút Previous --}}
                         @if ($products->onFirstPage())
                             <li class="prev disabled"><span><i class="fa fa-angle-left"></i></span></li>
                         @else
                             <li class="prev"><a href="{{ $products->previousPageUrl() }}"><i class="fa fa-angle-left"></i></a></li>
                         @endif
     
-                        {{-- Hiển thị các số trang --}}
                         @for ($i = 1; $i <= $products->lastPage(); $i++)
                             @if ($i == $products->currentPage())
                                 <li class="active"><span>{{ $i }}</span></li>
@@ -169,29 +155,20 @@
                             @endif
                         @endfor
     
-                        {{-- Nút Next --}}
                         @if ($products->hasMorePages())
                             <li class="next"><a href="{{ $products->nextPageUrl() }}"><i class="fa fa-angle-right"></i></a></li>
                         @else
                             <li class="next disabled"><span><i class="fa fa-angle-right"></i></span></li>
                         @endif
                     </ul>
-                        <!-- /.list-inline -->
                     </div>
-                    <!-- /.pagination-container -->
                 </div>
-                <!-- /.text-right -->
 
             </div>
-            <!-- /.filters-container -->
 
         </div>
-        <!-- /.search-result-container -->
 
-        <!-- /.col -->
     </div>
-    <!-- /.row -->
-    <!-- ============================================== BRANDS CAROUSEL ============================================== -->
     <div id="brands-carousel" class="logo-slider wow fadeInUp">
         <div class="logo-slider-inner">
             <div id="brand-slider" class="owl-carousel brand-slider custom-carousel owl-theme">
@@ -250,10 +227,8 @@
         <!-- /.logo-slider-inner -->
 
     </div>
-    <!-- /.logo-slider -->
     <!-- ============================================== BRANDS CAROUSEL : END ============================================== -->
     </div>
-    <!-- /.container -->
 
     </div>
     <!-- /.body-content -->

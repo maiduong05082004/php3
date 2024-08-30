@@ -13,17 +13,19 @@
             <option value="0">Không hoạt động</option>
         </select>
     </div>
-    <div class="input-group my-3">
-        <label class="input-group-text" for="parent_id">Danh mục mẹ</label>
-        <select class="form-select" id="parent_id" name="parent_id">
-            <option value="">Danh mục mẹ</option>
-            @foreach ($categories as $parent)
-                <option value="{{ $parent->id }}" {{ isset($Categories) && $Categories->parent_id == $parent->id ? 'selected' : '' }}>
-                    {{ $parent->name }}
-                </option>
-            @endforeach
-        </select>
-    </div>
+    @if(request()->has('parent_id'))
+        <input type="hidden" name="parent_id" value="{{ request('parent_id') }}">
+    @else
+        <div class="input-group my-3">
+            <label class="input-group-text" for="parent_id">Danh mục mẹ</label>
+            <select class="form-select" id="parent_id" name="parent_id">
+                <option value="">Danh mục mẹ</option>
+                @foreach ($categories as $parent)
+                    <option value="{{ $parent->id }}">{{ $parent->name }}</option>
+                @endforeach
+            </select>
+        </div>
+    @endif
     
     <button type="submit" class="btn btn-primary">Lưu danh mục</button>
 </form>
