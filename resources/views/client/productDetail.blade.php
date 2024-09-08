@@ -125,7 +125,7 @@
                                                 @csrf
                                                 <input type="hidden" name="product_id" value="{{ $product->id }}">
                                                 <input type="hidden" name="variant_id" id="variant_id" value="">
-
+                                
                                                 <div class="form-group">
                                                     <label>Chọn màu sắc:</label>
                                                     <div id="color-buttons" class="color-buttons">
@@ -139,7 +139,7 @@
                                                         @endforeach
                                                     </div>
                                                 </div>
-
+                                
                                                 <div class="form-group">
                                                     <label>Chọn kích thước:</label>
                                                     <div id="size-buttons">
@@ -152,21 +152,19 @@
                                                         @endforeach
                                                     </div>
                                                 </div>
-
+                                
                                                 <div class="col-sm-2">
                                                     <span class="label">Số lượng :</span>
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <div class="cart-quantity">
                                                         <div class="quant-input">
-                                                            <input type="number" value="1" id="quantity"
-                                                                style=" width: 185px; ">
+                                                            <input type="number" name="quantity" value="1" id="quantity" style=" width: 185px; ">
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6">
-                                                    <button type="submit" class="btn btn-primary"
-                                                        id="add-to-cart-btn"><i
+                                                    <button type="submit" class="btn btn-primary" id="add-to-cart-btn"><i
                                                             class="fa fa-shopping-cart inner-right-vs"></i> Add to cart
                                                     </button>
                                                 </div>
@@ -182,125 +180,98 @@
         </div><!-- /.container -->
     </div><!-- /.body-content -->
     <script>
-        function changeMainImage(imageUrl) {
-            // Tìm phần tử hình ảnh chính và thay đổi thuộc tính `src`
-            const mainImage = document.querySelector('.single-product-gallery-item img');
-            mainImage.src = imageUrl;
-        }
-
-        function updateStock(stock) {
-            const stockBox = document.querySelector('.stock-box .stock');
-            stockBox.textContent = stock;
-        }
-
-        function updatePrice(price) {
-            const priceBox = document.querySelector('.price-box .price');
-            priceBox.textContent = price;
-        }
-
         document.addEventListener('DOMContentLoaded', function() {
             const variants = JSON.parse('@json($product->variants)');
             let selectedColorId = null;
             let selectedSizeId = null;
-
+    
+            function changeMainImage(imageUrl) {
+                const mainImage = document.querySelector('.single-product-gallery-item img');
+                mainImage.src = imageUrl;
+            }
+    
+            function updateStock(stock) {
+                const stockBox = document.querySelector('.stock-box .stock');
+                stockBox.textContent = stock;
+            }
+    
+            function updatePrice(price) {
+                const priceBox = document.querySelector('.price-box .price');
+                priceBox.textContent = price;
+            }
+    
             // Khi chọn màu sắc
             document.querySelectorAll('.btn-color').forEach(button => {
                 button.addEventListener('click', function() {
                     selectedColorId = this.getAttribute('data-color');
-
+    
+                    // Xóa class 'active' khỏi tất cả các div-btn-color và btn-color
+                    document.querySelectorAll('.div-btn-color').forEach(div => {
+                        div.classList.remove('active');
+                    });
+                    document.querySelectorAll('.btn-color').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+    
+                    // Thêm class 'active' vào div-btn-color và btn-color hiện tại
+                    this.closest('.div-btn-color').classList.add('active');
+                    this.classList.add('active');
+    
                     // Hiển thị kích thước phù hợp với màu sắc đã chọn
                     document.querySelectorAll('.btn-size').forEach(sizeButton => {
                         const sizeId = sizeButton.getAttribute('data-size');
-                        const matchingVariant = variants.find(variant => variant.color_id ==
-                            selectedColorId && variant.size_id == sizeId);
-
+                        const matchingVariant = variants.find(variant => variant.color_id == selectedColorId && variant.size_id == sizeId);
+    
                         if (matchingVariant) {
-                            sizeButton.style.display =
-                                'inline-block'; // Hiển thị kích thước tương ứng
-                            sizeButton.setAttribute('data-price', matchingVariant
-                                .priceSale ?? matchingVariant.price);
+                            sizeButton.style.display = 'inline-block';
+                            sizeButton.setAttribute('data-price', matchingVariant.priceSale ?? matchingVariant.price);
                             sizeButton.setAttribute('data-stock', matchingVariant.stock);
                         } else {
-                            sizeButton.style.display =
-                                'none'; // Ẩn kích thước không phù hợp
+                            sizeButton.style.display = 'none';
                         }
                     });
-
+    
                     // Cập nhật ảnh chính và giá tương ứng với màu sắc
-                    const firstVariant = variants.find(variant => variant.color_id ==
-                        selectedColorId);
+                    const firstVariant = variants.find(variant => variant.color_id == selectedColorId);
                     if (firstVariant) {
                         changeMainImage(`/storage/${firstVariant.images[0]?.url}`);
                         updatePrice(firstVariant.priceSale ?? firstVariant.price);
                     }
                 });
             });
-
+    
             // Khi chọn kích thước
             document.querySelectorAll('.btn-size').forEach(button => {
                 button.addEventListener('click', function() {
                     selectedSizeId = this.getAttribute('data-size');
-
+    
                     if (selectedColorId) {
-                        const matchingVariant = variants.find(variant => variant.color_id ==
-                            selectedColorId && variant.size_id == selectedSizeId);
-
+                        const matchingVariant = variants.find(variant => variant.color_id == selectedColorId && variant.size_id == selectedSizeId);
+    
                         if (matchingVariant) {
                             updatePrice(matchingVariant.priceSale ?? matchingVariant.price);
                             updateStock(matchingVariant.stock);
+                            document.getElementById('variant_id').value = matchingVariant.id; // Cập nhật giá trị variant_id
                         }
                     }
+    
+                    // Xóa class 'active' khỏi tất cả các btn-size
+                    document.querySelectorAll('.btn-size').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+    
+                    // Thêm class 'active' vào btn-size hiện tại
+                    this.classList.add('active');
                 });
             });
-            // Thêm sản phẩm vào giỏ hàng
-            document.getElementById('add-to-cart-btn').addEventListener('click', function() {
-                const quantity = document.getElementById('quantity').value;
-                const variant = variants.find(variant => variant.color_id == selectedColorId && variant
-                    .size_id == selectedSizeId);
-
-                if (!variant) {
-                    alert('Please select a valid color and size.');
-                    return;
-                }
-
-                $.ajax({
-                    url: '{{ route('cart.add') }}',
-                    method: 'POST',
-                    data: {
-                        _token: '{{ csrf_token() }}',
-                        product_id: '{{ $product->id }}',
-                        variant_id: variant.id,
-                        quantity: quantity
-                    },
-                    success: function(response) {
-                        alert(response.success);
-                    },
-                    error: function(response) {
-                        alert('An error occurred. Please try again.');
-                    }
-                });
-            });
+    
         });
-        // Đổi màu sắc
-        document.querySelectorAll('.btn-color').forEach(function(button) {
-            button.addEventListener('click', function() {
-                document.querySelectorAll('.btn-color').forEach(function(btn) {
-                    btn.classList.remove('active');
-                });
-                this.classList.add('active');
-                // Xử lý logic liên quan đến thay đổi màu sắc tại đây
-            });
-        });
-
-        // Đổi kích thước
-        document.querySelectorAll('.btn-size').forEach(function(button) {
-            button.addEventListener('click', function() {
-                document.querySelectorAll('.btn-size').forEach(function(btn) {
-                    btn.classList.remove('active');
-                });
-                this.classList.add('active');
-                // Cập nhật giá hoặc các logic khác khi chọn kích thước
-            });
-        });
+        function changeMainImage(imageUrl) {
+            // Tìm phần tử hình ảnh chính và thay đổi thuộc tính `src`
+            const mainImage = document.querySelector('.single-product-gallery-item img');
+            mainImage.src = imageUrl;
+        }
+        
     </script>
+    
 @endsection

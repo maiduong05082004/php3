@@ -9,9 +9,18 @@ use App\Models\User;
 
 class AuthController extends Controller
 {
+    private function getCategories()
+    {
+        return Category::where('parent_id', null)
+            ->where('id', '<>', 0)
+            ->with('children.children')
+            ->where('status', '<>', 3)
+            ->orderBy('id', 'asc')
+            ->get();
+    }
     public function showLoginForm()
     {
-        $categories = Category::where('id', '<>', 0)->where('status', '<>', 3)->orderBy('id', 'desc')->get();
+        $categories = $this->getCategories();
         return view('client.signIn', compact('categories'));
     }
 

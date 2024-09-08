@@ -131,7 +131,8 @@ class HomeController extends Controller
 
     public function checkout()
     {
-        return view('client.checkout');
+        $categories = $this->getCategories();
+        return view('client.checkout',compact('categories'));
     }
 
     public function NotFound()
