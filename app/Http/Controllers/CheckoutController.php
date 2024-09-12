@@ -36,6 +36,7 @@ class CheckoutController extends Controller
 
     public function submit(Request $request)
     {
+        $categories = $this->getCategories();
         // Kiểm tra các trường form
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
@@ -53,21 +54,6 @@ class CheckoutController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         }
-        $totalAmount = 0;
-        $shippingFee = 12;
-        $cityName = $request->city;
-        // Tính tổng số tiền
-        foreach (Cart::where('user_id', Auth::id())->get() as $item) {
-            $totalAmount += $item->price * $item->quantity;
-        }
-        if ($cityName == 1 || $cityName == 79) {
-            $shippingFee = 6; // Giảm phí cho các thành phố lớn
-        }
-        if ($totalAmount > 1000) {
-            $shippingFee = 0; // Miễn phí nếu tổng số tiền lớn hơn $1000
-        }
-        // Tính tổng tiền bao gồm phí vận chuyển
-        $grandTotal = $totalAmount + $shippingFee;
         // Tạo mã đơn hàng
         $orderCode = 'MD' . rand(0000, 9999) . 'H' . time();
         // Lưu thông tin đơn hàng vào database
@@ -81,7 +67,7 @@ class CheckoutController extends Controller
         $order->district = $request->district;
         $order->ward = $request->ward;
         $order->payment_method = $request->payment_method;
-        $order->total_amount = $grandTotal;
+        $order->total_amount = $request->grand_total;
         $order->order_code = $orderCode; // Lưu mã đơn hàng
         $order->save();
 
@@ -96,11 +82,21 @@ class CheckoutController extends Controller
             $orderItem->price = $item->price;
             $orderItem->save();
         }
-
+        // Xử lý thanh toán bằng PayPal
+        if ($request->payment_method == 'Paypal') {
+            return redirect()->route('paypal', ['order' => $order]);
+        }
         // Xóa giỏ hàng sau khi đặt hàng thành công
         Cart::where('user_id', Auth::id())->delete();
-
         // Chuyển hướng đến trang thành công
         return redirect()->route('order.success', ['id' => $order->id]);
+    }
+    private function processPayPalPayment($order)
+    {
+        // Chuyển hướng đến phương thức tạo thanh toán PayPal
+        return redirect()->route('payment.create', [
+            'amount' => $order->total_amount,
+            'order_id' => $order->id
+        ]);
     }
 }

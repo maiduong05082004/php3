@@ -17,7 +17,7 @@
                 <div class="row">
                     <div class="col-md-8">
                         <!-- Checkout Form -->
-                        <form action="{{ route('checkout.submit') }}" method="POST">
+                        <form action="{{ route('paypal') }}" method="POST">
                             @csrf
 
                             <!-- Billing Information -->
@@ -30,7 +30,8 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="name">Họ và tên: <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" required>
+                                                <input type="text" class="form-control" id="name" name="name"
+                                                    value="{{ old('name') }}" required>
                                                 @if ($errors->has('name'))
                                                     <span class="text-danger">{{ $errors->first('name') }}</span>
                                                 @endif
@@ -38,8 +39,10 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="phone">Số điện thoại: <span class="text-danger">*</span></label>
-                                                <input type="tel" class="form-control" id="phone" name="phone" value="{{ old('phone') }}" required>
+                                                <label for="phone">Số điện thoại: <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="tel" class="form-control" id="phone" name="phone"
+                                                    value="{{ old('phone') }}" required>
                                                 @if ($errors->has('phone'))
                                                     <span class="text-danger">{{ $errors->first('phone') }}</span>
                                                 @endif
@@ -48,7 +51,8 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="email">Email: <span class="text-danger">*</span></label>
-                                        <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" required>
+                                        <input type="email" class="form-control" id="email" name="email"
+                                            value="{{ old('email') }}" required>
                                         @if ($errors->has('email'))
                                             <span class="text-danger">{{ $errors->first('email') }}</span>
                                         @endif
@@ -56,8 +60,11 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label for="city">Tỉnh/Thành phố <span class="text-danger">*</span></label>
-                                                <select id="city-select" class="form-control unicase-form-control selectpicker" name="city" required>
+                                                <label for="city">Tỉnh/Thành phố <span
+                                                        class="text-danger">*</span></label>
+                                                <select id="city-select"
+                                                    class="form-control unicase-form-control selectpicker" name="city"
+                                                    required>
                                                     <option value="">--Chọn tùy chọn--</option>
                                                 </select>
                                                 @if ($errors->has('city'))
@@ -68,7 +75,9 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="district">Quận/Huyện <span class="text-danger">*</span></label>
-                                                <select id="district-select" class="form-control unicase-form-control selectpicker" name="district" required>
+                                                <select id="district-select"
+                                                    class="form-control unicase-form-control selectpicker" name="district"
+                                                    required>
                                                     <option value="">--Chọn tùy chọn--</option>
                                                 </select>
                                                 @if ($errors->has('district'))
@@ -79,7 +88,9 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="ward">Phường/Xã <span class="text-danger">*</span></label>
-                                                <select id="ward-select" class="form-control unicase-form-control selectpicker" name="ward" required>
+                                                <select id="ward-select"
+                                                    class="form-control unicase-form-control selectpicker" name="ward"
+                                                    required>
                                                     <option value="">--Chọn tùy chọn--</option>
                                                 </select>
                                                 @if ($errors->has('ward'))
@@ -90,7 +101,8 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="address">Đỉa chỉ chi tiết: <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" id="address" name="address" value="{{ old('address') }}" required>
+                                        <input type="text" class="form-control" id="address" name="address"
+                                            value="{{ old('address') }}" required>
                                         @if ($errors->has('address'))
                                             <span class="text-danger">{{ $errors->first('address') }}</span>
                                         @endif
@@ -130,6 +142,7 @@
                                     <button type="submit" class="btn btn-primary">Place Order</button>
                                 </div>
                             </div><!-- /.Order Review -->
+                            <input type="hidden" name="grand_total" value="0">
                         </form><!-- /.Checkout Form -->
                     </div>
 
@@ -147,16 +160,20 @@
                                                 <li>
                                                     <div class="d-flex align-items-center gap-3">
                                                         <div class="product-thumbnail mb-2">
-                                                            <img src="{{ asset('storage/' . $item->product->image) }}" alt="{{ $item->product->name }}" style="width: 60px; height: 60px;">
+                                                            <img src="{{ asset('storage/' . $item->product->image) }}"
+                                                                alt="{{ $item->product->name }}"
+                                                                style="width: 60px; height: 60px;">
                                                         </div>
                                                         <div>
                                                             <div>
                                                                 <strong>{{ $item->product->name }}</strong>
                                                                 <span class="quantity">x{{ $item->quantity }}</span>
-                                                                <span class="price">{{ number_format($item->price * $item->quantity, 2) }}$</span>
+                                                                <span
+                                                                    class="price">{{ number_format($item->price * $item->quantity, 2) }}$</span>
                                                             </div>
                                                             <div class="product-info">
-                                                                <small>{{ $item->variant->color->name ?? '' }} / {{ $item->variant->size->name ?? '' }}</small>
+                                                                <small>{{ $item->variant->color->name ?? '' }} /
+                                                                    {{ $item->variant->size->name ?? '' }}</small>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -174,7 +191,8 @@
                                         </div>
                                         <div class="cart-grand-total d-flex justify-content-between">
                                             <span>Grand Total:</span>
-                                            <span class="inner-left-md" id="grand-total">{{ number_format($totalAmount, 2) }} $</span>
+                                            <span class="inner-left-md"
+                                                id="grand-total">{{ number_format($totalAmount, 2) }} $</span>
                                         </div>
                                     </div>
                                 </div>
@@ -297,7 +315,16 @@
                 // Cập nhật lại giao diện
                 $('#shipping-fee').text(shippingFee.toFixed(2) + '$');
                 $('#grand-total').text(grandTotal.toFixed(2) + '$');
+
+                $('input[name="grand_total"]').val(grandTotal.toFixed(2)); // Cập nhật giá trị grand_total
             });
+        });
+        $('form').on('submit', function() {
+            const grandTotal = $('input[name="grand_total"]').val();
+            if (grandTotal === '0') {
+                alert('Grand Total is required. Please select your address.');
+                return false; // Ngăn không cho form được gửi
+            }
         });
     </script>
 @endsection
