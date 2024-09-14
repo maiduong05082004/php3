@@ -57,7 +57,7 @@ class PayPalController extends Controller
             $order = new Order();
             $order->user_id = Auth::id();
             $order->order_code = 'MD' . rand(0000, 9999) . 'H' . time(); // Tạo mã đơn hàng
-            $order->total_amount = $response['purchase_units'][0]['amount']['value']; // Lấy tổng số tiền
+            $order->total_amount = $request->grand_total;
             $order->payment_method = 'PayPal'; // Phương thức thanh toán
             $order->save();
     

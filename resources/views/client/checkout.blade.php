@@ -17,7 +17,7 @@
                 <div class="row">
                     <div class="col-md-8">
                         <!-- Checkout Form -->
-                        <form action="{{ route('paypal') }}" method="POST">
+                        <form action="{{ route('checkout.submit') }}" method="POST">
                             @csrf
 
                             <!-- Billing Information -->
@@ -120,9 +120,9 @@
                                         <label for="payment_method">Select Payment Method</label>
                                         <select class="form-control" id="payment_method" name="payment_method" required>
                                             <option value="">Select a payment method</option>
-                                            <option value="Credit card">Credit Card</option>
+                                            <option value="Credit card">VNPAY</option>
                                             <option value="Paypal">PayPal</option>
-                                            <option value="Bank transfer">Bank Transfer</option>
+                                            <option value="Bank transfer">MOMO</option>
                                         </select>
                                         @if ($errors->has('payment_method'))
                                             <span class="text-danger">{{ $errors->first('payment_method') }}</span>

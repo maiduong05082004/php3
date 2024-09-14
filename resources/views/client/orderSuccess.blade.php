@@ -14,7 +14,7 @@
                         <p><strong>Tên:</strong> {{ $order->name }}</p>
                         <p><strong>Số điện thoại:</strong> {{ $order->phone }}</p>
                         <p><strong>Email:</strong> {{ $order->email }}</p>
-                        <p><strong>Địa chỉ:</strong> {{ $order->address }}, {{ $order->ward }}, {{ $order->district }}, {{ $order->city }}</p>
+                        <p><strong>Địa chỉ:</strong> {{ $order->address }}</p>
                         <p><strong>Phương thức thanh toán:</strong> {{ $order->payment_method }}</p>
                         <p><strong>Tổng số tiền:</strong> {{ number_format($order->total_amount, 2) }} $ <span>(Phí vận chuyển: {{$feeShip}} $)</span></p>
                     </div>

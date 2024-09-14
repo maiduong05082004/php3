@@ -48,9 +48,11 @@ Route::post('/checkout/submit', [CheckoutController::class, 'submit'])->name('ch
 // Route::get('payment/cancel', [PayPalController::class, 'paymentCancel'])->name('payment.cancel');
 // Route::post('payment/create', [PayPalController::class, 'createPayment'])->name('payment.create');
 // Route::get('/order-success/{id}', [OrderController::class, 'show'])->name('order.success');
-Route::post('paypal/payment',[PayPalController::class,'payment'])->name('paypal');
-Route::get('paypal/success',[PayPalController::class,'success'])->name('paypal_success');
-Route::get('paypal/cancel',[PayPalController::class,'cancel'])->name('paypal_cancel');
+Route::post('/checkout/submit', [CheckoutController::class, 'submit'])->name('checkout.submit');
+Route::post('paypal/payment', [CheckoutController::class, 'payment'])->name('paypal');
+Route::get('paypal/success', [CheckoutController::class, 'success'])->name('paypal_success');
+Route::get('paypal/cancel', [CheckoutController::class, 'cancel'])->name('paypal_cancel');
+Route::get('/order-success/{id}', [OrderController::class, 'show'])->name('order.success');
 
 Route::get('/404', [HomeController::class, 'NotFound']);
 Route::get('/category/{id}/products', [HomeController::class, 'showCategoryProducts'])->name('category.products');
